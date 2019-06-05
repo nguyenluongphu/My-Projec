@@ -1,0 +1,298 @@
+﻿@model ShopBookMVC.Models.KhachHang
+<!--thư viện của captcha mvc-->
+@*@model CaptchaMVC5.Models.Registration*@
+@using CaptchaMvc.HtmlHelpers
+ 
+<style>
+    #txtTaiKhoan, #txtDiaChi, #txtSDT, #txtHoTen, #txtEmail,#txtMatKhauCu {
+        width: 100%;
+        outline: none;
+        font-size: 17px;
+        padding: .8em 1em;
+        border: 1px solid #000;
+        -webkit-appearance: none;
+        display: inline-block;
+        background: rgb(255, 255, 255);
+        transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        box-sizing: border-box;
+    }
+#popup-register {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*background-color: rgba(0,0,0,.5);*/
+    top: 0px;
+    left: 0px;
+    z-index: 999; /*Thuộc tính để làm chìm các chữ xung quanh thẻ div*/
+    display: none;
+    /*scrollbar-shadow-color: ActiveBorder;*/
+}
+/*đăng ký */
+
+.appointment-w4{
+    width: 70%;
+    /*margin: 30px auto 27px;*/
+    background-color: rgba(0, 0, 0, 0.78);
+    padding: 20px 20px;
+    -webkit-box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+    box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+
+}
+#btnDangKy{
+    width: 47%;
+    background: #000;
+    outline: none;
+    color: #fff;
+    margin: 0px 0px 18px;
+    font-size: 18px;
+    font-weight: 400;
+    border: 1px solid #fff;
+    padding: 11px 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+}
+#btnDangKy:hover{
+   background: #5e5e5e;
+   transition: 0.5s;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5e5e5e', endColorstr='#404040',GradientType=0 );
+	box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px -1px rgba(0,0,0,0.15);
+	-moz-box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px 0 rgba(0,0,0,0.15);
+	-webkit-box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px -1px rgba(0,0,0,0.15);
+}
+</style>
+<div id="popup-register">
+    <div class="appointment-w4" style="margin-top: 5px; padding: 20px 20px;">
+        <div id="cancel-popup-login">
+            <a href="#" id="linkOffRegister"><i class="fas fa-times-circle"></i></a>
+        </div>
+        @using (Html.BeginForm("Register", "Home", FormMethod.Post, new { @name = "register", @id="form1" }))
+        {
+            @Html.AntiForgeryToken()
+            <h2 class="sub-heading-wthree">Thông Tin Đăng Ký</h2>
+            <div style="padding-bottom:5px; text-align:center;">
+                <span id="textThongBaoThatBai"></span>
+            </div>
+            
+        <div class="main">
+           <div class="row">
+               <div class="col-sm-6">
+                   <div class="row" style="text-align:center;padding-bottom:15px;">
+                       <span style="color:white; font-weight:bold; font-size:15pt;">Thông Tin Cá Nhân</span>
+                   </div>
+                   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                   <div class="form-left-w3l">
+                       <div style="padding-bottom:5px;">
+                           <span id="errorHT"></span>
+                       </div>
+                       @Html.TextBoxFor(model => model.hoTen, new { @type = "text", @autofocus = "autofocus", @id = "txtHoTen", @placeholder = "Họ tên...", @required = "" })
+                   </div>
+                   <div class="form-right-w3ls ">
+                       <div style="padding-bottom:5px;">
+                           <span id="errorDC"></span>
+                       </div>
+                       @Html.TextBoxFor(model => model.diaChi, new { @type = "text", @placeholder = "Địa chỉ...", @id = "txtDiaChi", @required = "" })
+                       <div class="clearfix"></div>
+                   </div>
+                   <div class="form-right-w3ls ">
+                       <div style="padding-bottom:5px;">
+                           <span id="errorSDT"></span>
+                       </div>
+                       @Html.TextBoxFor(model => model.soDT, new { @type = "text", @placeholder = "Số điện thoại...", @id = "txtSDT", @required = "" })
+                       <div class="clearfix"></div>
+                   </div>
+                   <div class="form-right-w3ls ">
+                       <div style="padding-bottom:5px;">
+                           <span id="errorEM"></span>
+                       </div>
+                       @Html.TextBoxFor(model => model.email, new { @type = "email", @placeholder = "Email...", @id = "txtEmail", @required = "" })
+                       <div class="clearfix"></div>
+                   </div>
+
+               </div>
+               <div class="col-sm-6">
+                    <div class="row" style="text-align:center;padding-bottom:15px;">
+                        <span class="col-sm-9" style="color:white; font-weight:bold; font-size:15pt;">Thông Tin Đăng Nhập</span>
+                    </div>
+                   
+                    <div class="form-left-w3l">
+                        <div style="padding-bottom:5px;">
+                            <span id="errorTK"></span>
+                        </div>
+                        <div class="col-sm-9" style="float: left; padding-left: 0px;">
+                            @Html.TextBoxFor(model => model.maKH, new { @type = "text", @autofocus = "autofocus", @class = "txtTaiKhoan", @id = "txtTaiKhoan", @placeholder = "Tài Khoản", @required = "" })
+                        </div>
+                        <button type="button" class="btn btn-primary" id="btnKiemTra">Kiểm tra</button><br>
+                    </div>
+                   <div class="col-sm-9" style="float: left; padding-left: 0px;">
+                       <div class="form-right-w3ls ">
+                           <div style="padding-bottom:5px;">
+                               <span id="errorMK"></span>
+                           </div>
+                           @Html.TextBoxFor(model => model.matKhau, new { @type = "password", @class = "txtMatKhau", @id ="txtMatKhau", @placeholder = "Mật Khẩu", @required = "" })
+                           <div class="clearfix"></div>
+                       </div>
+                       <div id="capcharegister" class="row" style="text-align:center;">
+                           @Html.MathCaptcha()
+                       </div>
+                    </div>
+                </div>
+           </div>
+        </div>
+        
+            @*@Html.Captcha(registerCapcha)
+            @Html.TextBox("CaptchaCode")*@
+        <div class="btnn">
+            <button type="button" id="btnDangKy">Đăng Ký</button><br>
+        </div>
+        }
+        <div class="row" style="text-align:right; color:white; display:none;" id="hienThi">
+            <span id="textThanhCong"></span>
+            <a href="#" id="btnDN" class="btn btn-success">Đăng nhập</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnKiemTra').click(function (e) {
+            e.preventDefault();
+            reset1();
+            var dt = $(".txtTaiKhoan").val();
+            //alert(dt);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("KiemTraTaiKhoan", "Home")',
+                data: { id: dt },
+                success: function (result) {
+                    if (result.code == 0) {
+                        reset1();
+                        $('#errorTK').html(result.message).css("color", "red");
+                    }
+                    else {
+                        reset1();
+                        $('#errorTK').html(result.message).css("color", "green");
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnDangKy').on('click', function () {
+            reset1();
+            //var dt = $(".txtTaiKhoan").val();
+            var data = $("#form1").serializeArray();
+
+            if (check_register()) {
+                reset1();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Register", "Home")',
+                    data: data,
+                    success: function (result) {
+                        if (result.code == -1) {
+                            $('#textThongBaoThatBai').html(result.message).css("color", "red");
+                        }
+                        if (result.code == 1) {
+                            reset1();
+                            $('#textThongBaoThatBai').html("");
+                            $('#hienThi').css("display", "block");
+                            $('#textThanhCong').html(result.message).css("color", "green");
+                        }
+                        if (result.code == 0) {
+                            reset1();
+                            $('#textThongBaoThatBai').html("Đăng ký thất bại!").css("color", "red");
+                            reset1();
+                            $('#errorTK').html(result.message).css("color", "red");
+                        }
+                        if (result.code == -2) {
+                            reset1();
+                            $('#errorTK').html("");
+                            $('#errorMK').html("");
+                            $('#textThongBaoThatBai').html(result.message).css("color", "red");
+                            $('#capcharegister').load(' #capcharegister');
+                        }
+                    }
+                });
+            } else {
+                $('#textThongBaoThatBai').html("Đăng ký thất bại!").css("color", "red");
+            }
+
+        });
+    });
+</script>
+<script type="text/javascript">
+    function check_register() {
+        var tk = $('.txtTaiKhoan').val();
+        var mk = $('.txtMatKhau').val();
+        var ht = $('#txtHoTen').val();
+        var sdt = $('#txtSDT').val();
+        var dc = $('#txtDiaChi').val();
+        var em = $('#txtEmail').val();
+        reset1();
+        var kiemtra = true;
+        
+        if (tk == "") {
+            $('#errorTK').html("Tài khoản không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (ht == "") {
+            $('#errorHT').html("Họ tên không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (dc == "") {
+            $('#errorDC').html("Địa chỉ không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (sdt == "") {
+            $('#errorSDT').html("Số điện thoại không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (em == "") {
+            $('#errorEM').html("Email không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (mk == "") {
+            $('#errorMK').html("Mật khẩu không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        return kiemtra;
+    }
+
+    function reset1() {
+        $('#errorTK').html(""); 
+        $('#textThongBaoThatBai').html("");
+        $('#errorMK').html("");
+        $('#errorDC').html("");
+        $('#errorEM').html("");
+        $('#errorSDT').html("");
+        $('#errorHT').html("");
+
+    }
+</script>
+<script>
+    $("#btnDN").click(function (e) {
+        e.preventDefault();
+        $("#popup-login").fadeIn(500);//show();//css("display","block");
+        $("#popup-register").hide();
+    });
+    $("#linkDangKy").click(function (e) {
+        e.preventDefault();
+        $("#popup-register").fadeIn(500);//show();//css("display","block");
+    });
+    $("#linkOffRegister").click(function (e) {
+        e.preventDefault();
+        $("#popup-register").fadeOut(500);//show();//css("display","block");
+    });
+</script>

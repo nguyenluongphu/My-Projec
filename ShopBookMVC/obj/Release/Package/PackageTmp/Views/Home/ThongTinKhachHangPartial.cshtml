@@ -1,0 +1,370 @@
+﻿@model ShopBookMVC.Models.KhachHang
+<style>
+    #txtDiaChi1, #txtSDT1, #txtHoTen1, #txtEmail1,#txtMatKhauCu1{
+        width: 100%;
+        outline: none;
+        font-size: 17px;
+        padding: .8em 1em;
+        border: 1px solid #000;
+        -webkit-appearance: none;
+        display: inline-block;
+        background: rgb(255, 255, 255);
+        transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        box-sizing: border-box;
+    }
+    #btnCapNhatMatKhau, #btnCapNhatThongTin{
+    width: 100%;
+    background: #000;
+    outline: none;
+    color: #fff;
+    margin: 0px 0px 18px;
+    font-size: 18px;
+    font-weight: 400;
+    border: 1px solid #fff;
+    padding: 11px 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+}
+#btnCapNhatMatKhau:hover, #btnCapNhatThongTin:hover{
+   background: #5e5e5e;
+   transition: 0.5s;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5e5e5e', endColorstr='#404040',GradientType=0 );
+	box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px -1px rgba(0,0,0,0.15);
+	-moz-box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px 0 rgba(0,0,0,0.15);
+	-webkit-box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px -1px rgba(0,0,0,0.15);
+}
+    #popup-info {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.5);
+    top: 0px;
+    left: 0px;
+    z-index: 99; /*Thuộc tính để làm chìm các chữ xung quanh thẻ div*/
+    display: none;
+}
+    .appointment-w4{
+    width: 70%;
+    margin: 30px auto 27px;
+    background-color: rgba(0, 0, 0, 0.78);
+    padding: 40px 40px;
+    -webkit-box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+    box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+    
+}
+    #title{
+        color:white;
+        font-weight:bold;
+    }
+    #textThongBaoChung{
+        padding:25px;
+    }
+</style>
+<div id="popup-info">
+    <div class="appointment-w4">
+        <div id="cancel-popup-info" style="float:right;">
+            <a href="#" id="cancel-info"><i class="fas fa-times-circle"></i></a>
+        </div>
+        <h2 class="sub-heading-wthree">Thông Tin Người Dùng</h2>
+        <div style="padding-bottom:5px; text-align:center; font-size:15pt;">
+            <span id="textThongBaoChung"></span>
+        </div>
+        <div class="main">
+            <div class="row">
+                <div class="col-sm-6">
+                    @using (Html.BeginForm("UpdateInfo", "Home", FormMethod.Post, new { @name = "update", @id = "update-info" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="row" style="text-align:center;padding-bottom:15px;">
+                            <span style="color:white; font-weight:bold; font-size:15pt;">Thông Tin Cá Nhân</span>
+                        </div>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-left-w3l" style="display:none;">
+                            <div style="padding-bottom:5px;">
+                                <span id="errorHT1"></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.maKH, new { @Type = "text", @autofocus = "autofocus", @id = "txtHoTen1", @placeholder = "Họ tên...", @required = "" })
+                            @Html.ValidationMessageFor(model => model.hoTen, "", new { @class = "text-danger" })
+                        </div>
+                        <span id="title">Họ Tên: </span>
+                        <div class="form-left-w3l">
+                            <div style="padding-bottom:5px;">
+                                <span id="errorHT1"></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.hoTen, new { @Type = "text", @autofocus = "autofocus", @id = "txtHoTen1", @placeholder = "Họ tên...", @required = "" })
+                            @Html.ValidationMessageFor(model => model.hoTen, "", new { @class = "text-danger" })
+                        </div>
+                        <span id="title">Địa Chỉ: </span>
+                        <div class="form-right-w3ls ">
+                            <div style="padding-bottom:5px;">
+                                <span id="errorDC1"></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.diaChi, new { @Type = "text", @placeholder = "Địa chỉ...", @id = "txtDiaChi1", @required = "" })
+                            @Html.ValidationMessageFor(model => model.diaChi, "", new { @class = "text-danger" })
+                            <div class="clearfix"></div>
+                        </div>
+                        <span id="title">Số điện thoại: </span>
+                        <div class="form-right-w3ls ">
+
+                            <div style="padding-bottom:5px;">
+                                <span id="errorSDT1"></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.soDT, new { @Type = "text", @placeholder = "Số điện thoại...", @id = "txtSDT1", @required = "" })
+                            @Html.ValidationMessageFor(model => model.soDT, "", new { @class = "text-danger" })
+                            <div class="clearfix"></div>
+                        </div>
+                        <span id="title">Email: </span>
+                        <div class="form-right-w3ls ">
+                            <div style="padding-bottom:5px;">
+                                <span id="errorEM1"></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.email, new { @Type = "email", @placeholder = "Email...", @id = "txtEmail1", @required = "" })
+                            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="btnn">
+                            <div class="form-right-w3ls ">
+                                <button class="col-sm-5" type="button" id="btnCapNhatThongTin">Cập Nhật Thông Tin</button><br>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-sm-6">
+                    @using (Html.BeginForm("Updatepass", "Home", FormMethod.Post, new { @name = "update2", @id = "update-pass" }))
+                    {
+                        <div class="row" style="text-align:center;padding-bottom:15px;">
+                            <span style="color:white; font-weight:bold; font-size:15pt;">Đổi Mật Khẩu</span>
+                        </div>
+                        <span id="title">Mật khẩu cũ: </span>
+                        <div class="form-left-w3l">
+                            <div style="padding-bottom:5px;">
+                                <span id="txtTrungMa"></span>
+                                <span id="errorMKC"></span>
+                            </div>
+                            @Html.TextBox("txtMatKhauCu1", "", new { @Type = "text", @autofocus = "autofocus", @id = "txtMatKhauCu1", @placeholder = "Mật khẩu cũ", @required = "" })
+                        </div>
+                        <span id="title">Mật khẩu Mới: </span>
+                        <div class="form-right-w3ls ">
+                            <div style="padding-bottom:5px;">
+                                <span id="errorMKM"></span>
+                            </div>
+                            @Html.TextBox("txtMatKhauMoi1", "", new { @Type = "password", @id = "txtMatKhauMoi1", @placeholder = "Mật Khẩu Mới", @required = "" })
+                            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                            <div class="clearfix"></div>
+                        </div>
+                        <span id="title">Nhập lại mật khẩu mới: </span>
+                        <div class="form-right-w3ls ">
+                                    <div style="padding-bottom:5px;">
+                                        <span id="errorXNMKM"></span>
+                                    </div>
+                                    @Html.TextBox("txtXacNhanMatKhau", "", new { @Type = "password", @id = "txtXacNhanMatKhau", @placeholder = "Xác Nhận Mật Khẩu", @required = "" })
+                                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                                    <div class="clearfix"></div>
+                                </div>
+                        <div class="btnn">
+                            <div class="form-right-w3ls ">
+                                <button class="col-sm-5" type="button" id="btnCapNhatMatKhau">Đổi Mật Khẩu</button><br>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnCapNhatThongTin').on('click', function () {
+            //alert("có qua đây");
+            //var dt = $(".txtTaiKhoan").val();
+            var data = $("#update-info").serializeArray();
+            if (check_Info()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateInfo", "Home")',
+                    data: data,
+                    success: function (result) {
+                        //console.log(result);
+                        if (result.code == -1) {
+                            $('#textThongBaoChung').html(result.message).css("color", "red");
+                        }
+                        else
+                        {
+                            $('#hienThi').css("display", "block");
+                            $('#textThongBaoChung').html(result.message).css("color", "green");
+                        }
+                    }
+                });
+            }
+            else {
+                $('#textThongBaoChung').html("Cập nhật thất bại!").css("color", "red");
+            }
+
+        });
+    });
+
+    
+</script>
+<script type="text/javascript">
+    //cập nhật mật khẩu
+    $(document).ready(function () {
+        $('#btnCapNhatMatKhau').on('click', function () {
+            //alert("có qua đây");
+            //var dt = $(".txtTaiKhoan").val();
+            var data = $("#update-pass").serializeArray();
+            if (check_Pass()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdatePass", "Home")',
+                    data: data,
+                    success: function (result) {
+                        //console.log(result);
+                        if (result.code == -1) {
+                            $('#textThongBaoChung').html(result.message).css("color", "red");
+                        }
+                        else if (result.code == 1) {
+                            $('#textThongBaoChung').html(result.message).css("color", "green");
+                        } else {
+                            reset2();
+                            $('#textThongBaoChung').html(result.message).css("color", "red");
+                            $('#errorMKC').html("Mật khẩu cũ không đúng!").css("color", "red");
+                        }
+                    }
+                });
+            }
+            else {
+                $('#textThongBaoChung').html("Cập nhật thất bại!").css("color", "red");
+            }
+
+        });
+    });
+</script>
+<script type="text/javascript">
+    function check_Pass() {
+        var mkc = $('#txtMatKhauCu1').val();
+        var mkm = $('#txtMatKhauMoi1').val();
+        var xnmkm = $('#txtXacNhanMatKhau').val();
+        reset2();
+        var kiemtra = true;
+        if (mkc == "" && xnmkm == "" && mkm == "") {
+            $('#errorMKC').html("Không được để trống!").css("color", "red");
+            $('#errorMKM').html("Không được để trống!").css("color", "red");
+            $('#errorXNMKM').html("Không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (mkc != "" && xnmkm != "" && mkm != "") {
+            if (mkm != xnmkm) {
+                reset2();
+                $('#errorXNMKM').html("Bạn cần nhập khớp mật khẩu!").css("color", "red");
+                kiemtra = false;
+            }
+        }
+
+        if (mkc == "") {
+            //reset1();
+            $('#errorMKC').html("Không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (mkm == "") {
+            //reset1();
+            $('#errorMKM').html("Không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (xnmkm == "") {
+            //reset1();
+            $('#errorXNMKM').html("Không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        return kiemtra;
+    }
+
+    function reset2() {
+        $('#errorMKC').html("");
+        $('#errorMKM').html("");
+        $('#errorXNMKM').html("");
+    }
+</script>
+<script type="text/javascript">
+    function check_Info() {
+        //var tk = $('#txtTaiKhoan').val();
+        //var mkm = $('#txtMatKhauMoi').val();
+        var ht = $('#txtHoTen1').val();
+        var sdt = $('#txtSDT1').val();
+        var dc = $('#txtDiaChi1').val();
+        var em = $('#txtEmail1').val();
+        //var mkc = $('#txtMatKhauMoi1').val();
+        //var xnmkm = $('#txtXacNhanMatKhau').val();
+        //mkc == "" && xnmkm == "" && mkm == "" &&
+        reset1();
+        var kiemtra = true;
+        if (sdt == "" && ht == "" && em == "" && dc == "") {
+            //$('#errorMKC').html("Tài khoản không được để trống!").css("color", "red");
+            //$('#errorMKM').html("Mật khẩu không được để trống!").css("color", "red");
+            //$('#errorXNMKM').html("Mật khẩu không được để trống!").css("color", "red");
+            $('#errorHT1').html("Họ tên không được để trống!").css("color", "red");
+            $('#errorDC1').html("Địa chỉ không được để trống!").css("color", "red");
+            $('#errorSDT1').html("Số điện thoại không được để trống!").css("color", "red");
+            $('#errorEM1').html("Email không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (ht == "") {
+            //reset1();
+            $('#errorHT1').html("Họ tên không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (dc == "") {
+            //reset1();
+            $('#errorDC1').html("Địa chỉ không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (sdt == "") {
+            //reset1();
+            $('#errorSDT1').html("Số điện thoại không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        if (em == "") {
+            //reset1();
+            $('#errorEM1').html("Email không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        //if (mkm == "") {
+        //    //reset1();
+        //    $('#errorMatKhau').html("Mật khẩu không được để trống!").css("color", "red");
+        //    kiemtra = false;
+        //}
+        return kiemtra;
+    }
+
+    function reset1() {
+        //$('#errorMKC').html("");
+        //$('#errorMKM').html("");
+        //$('#errorXNMKM').html("");
+        $('#errorDC').html("");
+        $('#errorEM').html("");
+        $('#errorSDT').html("");
+        $('#errorHT').html("");
+
+    }
+</script>
+<script type="text/javascript">
+    $("#btninfo").click(function (e) {
+        e.preventDefault();
+        $("#popup-info").fadeIn(500);//show();//css("display","block");
+    });
+    $("#cancel-info").click(function (e) {
+        e.preventDefault();
+        $("#popup-info").fadeOut(500);//show();//css("display","block");
+    });
+</script>

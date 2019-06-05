@@ -1,0 +1,205 @@
+﻿@model ShopBookMVC.Models.DangNhap
+@using CaptchaMvc.HtmlHelpers
+<style>
+   #popup-login {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*background-color: none;*/
+    top: 0px;
+    left: 0px;
+    z-index: 999; /*Thuộc tính để làm chìm các chữ xung quanh thẻ div*/
+    display: none;
+    /*scrollbar-shadow-color: ActiveBorder;*/
+    }
+   .appointment-w3{
+    /*width: 70%;*/
+    /*margin: 30px auto 27px;*/
+    background-color: rgba(0, 0, 0, 0.78);
+    padding: 20px 20px;
+    -webkit-box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+    box-shadow: 3px 17px 43px 6px rgba(0, 0, 0, 0.75);
+
+}
+    #txtTaiKhoan{
+        width:100%;
+        outline: none;
+        font-size: 17px;
+        padding: .8em 1em;
+        border: 1px solid #000;
+        -webkit-appearance: none;
+        display: inline-block;
+        background: rgb(255, 255, 255);
+        transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        box-sizing: border-box;
+    }
+    #btnDangNhap{
+    width: 47%;
+    background: #000;
+    outline: none;
+    color: #fff;
+    margin: 0px 0px 18px;
+    font-size: 18px;
+    font-weight: 400;
+    border: 1px solid #fff;
+    padding: 11px 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    -o-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    -ms-transition: 0.5s all;
+}
+#btnDangNhap:hover{
+   background: #5e5e5e;
+   transition: 0.5s;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5e5e5e', endColorstr='#404040',GradientType=0 );
+	box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px -1px rgba(0,0,0,0.15);
+	-moz-box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px 0 rgba(0,0,0,0.15);
+	-webkit-box-shadow: 1px 1px 0 0 #414141 inset, -1px -1px 0 0 #414141 inset, 0 1px 2px -1px rgba(0,0,0,0.15);
+}
+#capchalogin{
+    display: none;
+}
+</style>
+<div id="popup-login">
+    <div class="appointment-w3">
+        <div id="cancel-popup-login">
+            <a href="#" id="linkOffLogin"><i class="fas fa-times-circle"></i></a>
+        </div>
+        @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "login" }))
+        {
+            @Html.AntiForgeryToken()
+            <h2 class="sub-heading-wthree">Thông Tin Đăng Nhập</h2>
+
+            <div class="main">
+                <div class="row" style="text-align:center; padding-bottom:15px;">
+                    <span id="textThongBao"></span>
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-left-w3l">
+                    <div style="padding-bottom:5px;">
+                        <span id="errorTaiKhoan"></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.tenDangNhap, new { @Type = "text", @autofocus = "autofocus", @id = "txtTaiKhoan", @placeholder = "Tài Khoản", @required = "" })
+                    @Html.ValidationMessageFor(model => model.tenDangNhap, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-right-w3ls ">
+                    <div style="padding-bottom:5px;">
+                        <span id="errorMatKhau"></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.matKhau, new { @Type = "password", @id = "txtMatKhau", @placeholder = "Mật Khẩu", @required = "" })
+                    @Html.ValidationMessageFor(model => model.matKhau, "", new { @class = "text-danger" })
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div id="capchalogin" class="row" style="text-align:center;">
+                <div id="loadcapcha">
+                    @Html.MathCaptcha()
+                </div>
+            </div>
+            <div class="btnn">
+                <button type="button" id="btnDangNhap">Đăng Nhập</button><br>
+                <div class="left-side w3l">
+                    <input type="checkbox" class="checked">
+                    <span class="span">Nhớ Đăng Nhập</span>
+
+                </div>
+                <a href="#" class="for">Bạn Quên Mật Khẩu...?</a>
+                <div class="clear"></div>
+            </div>
+            
+            
+                
+             
+            <div class="header-social wthree">
+                <div class="line-mid">
+                    <h4>or</h4>
+                </div>
+                <ul>
+                    <li><a href="#" class="f">Đăng Nhập Với Facebook</a></li>
+                    <li><a href="#" class="g">Đăng Nhập Với Google+</a></li>
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnDangNhap').on('click', function () {
+            //var dt = $(".txtTaiKhoan").val();
+            //alert("có qua đây");
+            var data = $("#login").serializeArray();
+            if (check_login() == true) {
+                //alert("có qua đây1");
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Login", "Home")',
+                    data: data,
+                    success: function (result) {
+                        //console.log(result);
+                        if (result.code == 1) {
+                            $("#popup-login").hide();//show();//css("display","block");
+                            alert(result.message);
+                            location.reload();
+                        } else {
+                            $('#textThongBao').html(result.message).css("color", "red");
+                            if (result.code < -3) {
+                                $('#capchalogin').show();
+                                //$('#textThongBao').html(result.message).css("color", "red");
+                                $('#loadcapcha').load(' #loadcapcha');
+                            }
+                        }
+                    }
+                });
+            } else {
+                $('#textThongBao').html("Đăng nhập không thành công!").css("color", "red");
+            }
+        });
+    });
+    function check_login() {
+        var tk = $('#txtTaiKhoan').val();
+        var mk = $('#txtMatKhau').val();
+        //alert("có qua đây2");
+        resetlogin();
+        var kiemtra = true;
+        if (tk == "" && mk == "") {
+            $('#errorTaiKhoan').html("Tài khoản không được để trống!").css("color", "red");
+            $('#errorMatKhau').html("Mật khẩu không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        else if (mk == "") {
+            resetlogin();
+            $('#errorMatKhau').html("Mật khẩu không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        else if (tk == "") {
+            resetlogin();
+            $('#errorTaiKhoan').html("Tài khoản không được để trống!").css("color", "red");
+            kiemtra = false;
+        }
+        else
+            return kiemtra;
+    }
+    function resetlogin() {
+        $('#errorTaiKhoan').html("");
+        $('#errorMatKhau').html("");
+    }
+</script>
+<script type="text/javascript">
+        $("#linkDangNhap").click(function (e) {
+            e.preventDefault();
+            $("#popup-login").fadeIn(500);//show();//css("display","block");
+        });
+        $("#linkOffLogin").click(function (e) {
+            e.preventDefault();
+            $("#popup-login").fadeOut(500);//show();//css("display","block");
+        });
+</script>

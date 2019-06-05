@@ -1,0 +1,213 @@
+﻿@model ShopBookMVC.Models.Sach
+
+@{
+    ViewBag.Title = "ThemSach";
+    Layout = "~/Views/Shared/_adminChung.cshtml";
+
+}
+<style>
+    #header-title {
+        background: #b7bdc1;
+        height: 50px;
+        text-align: center;
+        margin: 0px;
+    }
+
+    #themSach {
+        margin: 0 auto;
+        width: 70%;
+        box-shadow: 0px 0px 3px rgb(150, 150, 150);
+        -webkit-box-shadow: 0px 0px 3px rgb(150, 150, 150);
+        -moz-box-shadow: 0px 0px 3px rgb(150, 150, 150);
+        -o-box-shadow: 0px 0px 3px rgb(150, 150, 150);
+    }
+
+    #tieudeThemSach {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin: auto 10px;
+    }
+</style>
+<!--sử dụng ckeditor-->
+<script>
+    CKEDITOR.replace('txtMoTa');
+</script>
+
+<script type="text/javascript">
+    //làm cho câu lệnh sẵn sàn được gọi
+    $(function () {
+        //bắt sự kiện nhấn vào nút chọn ảnh
+        $('#btnUpload').click(function () {
+            $('#fileUpload').trigger('click');
+        })
+        //bắt sự kiện change data của fileUpload
+        $('#fileUpload').change(function () {
+            //kiểm tra trình duyệt có hỗ trợ formData object chưa
+            if (window.FormData !== undefined) {
+                //lấy dữ liệu trên fileUpload
+                var fileUpload = $('#fileUpload').get(0);
+                var files = fileUpload.files;
+                //tạo đối tượng formdata
+                var formData = new FormData();
+                //đưa dữ liệu vào form
+                formData.append('file', files[0]);
+                //dùng ajax để đưa ảnh vào thu mục
+                $.ajax({
+                    type: 'POST',
+                    url: '/Sach/UpFile',
+                    contentType: false, //không có header
+                    processData: false, // không xử lý dữ liệu
+                    data: formData,
+                    success: function (urlImage) {
+                        //$('#pictureUpload').attr('src', urlImage);
+                        $('#picture').val(urlImage);
+                        //$('#pictureUpload').css("margin", "15px 0px");
+                        //$('#pictureUpload').css("width", "200px");
+                        //$('#pictureUpload').css("height", "300px");
+                    }
+                });
+            }
+        })
+    })
+</script>
+<div class="panel tasks-widget" id="themSach">
+    <div class="row" id="header-title">
+        <span id="tieudeThemSach">Chi Tiết Cuốn Sách</span>
+    </div>
+    <div class="row" style="text-align:center;">
+        <span id="thongBao" style="margin:0 auto; color:red;">@ViewBag.ThongBao</span>
+    </div>
+
+    <div class="row" style="padding:0px 15px;">
+        @using (Html.BeginForm("CapNhatSach", "Sach", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.maSach, htmlAttributes: new {  @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.maSach, new { @readonly = "readonly", @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.maSach, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.tenSach, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.tenSach, new { @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.tenSach, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.tacGia, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.tacGia, new { @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.tacGia, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.soLuong, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.soLuong, new { @type = "number", @min = "0", @max = "10000", @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.soLuong, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.gia, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.gia, new { @type = "number", @min = "0", @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.gia, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.soTap, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.soTap, new { @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.soTap, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ngayNhap, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.ngayNhap, new {@required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ngayNhap, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <!--chọn ảnh -->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.anh, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="col-sm-5 form-inline" style="padding-left:0px; padding-right:0px;">
+                            @Html.TextBoxFor(model => model.anh, new { @readonly = "readonly", @id = "picture", @name = "picture", @required = "", @class = "form-control" })
+                            <input type="file" id="fileUpload" accept="image/*" name="fileUpload" style="display:none;" />
+                        </div>
+                        <div class="col-sm-7">
+                            <input type="button" id="btnUpload" value="Chọn ảnh" class="btn btn-primary" />
+                        </div>
+                        @*<img id="pictureUpload" src="~/images/taixuong.jpg"/>*@
+                    </div>
+                </div>
+                <!-- kết thúc chọn ảnh -->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.maLoai, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.maLoai, null, new { @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.maLoai, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.moTa, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @*@Html.TextArea("txtMoTa", new { htmlAttributes = new { @class = "form-control", @id = "NoiDung", @name = "NoiDung" } })*@
+                        @Html.TextAreaFor(model => model.moTa, new { @class = "form-control", @id = "txtMoTa", @name = "txtMoTa" })
+                        @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Cập Nhật" class="btn btn-success" />
+                        <a href="@Url.Action("Index","Sach")" value="Quay về" class="btn btn-primary">Quay về</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnChonAnh').on('click', function () {
+                //reset1();
+                //var dt = $(".txtTaiKhoan").val();
+                var data = $("#formupanh").serializeArray();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpFie", "Sach")',
+                    data: data,
+                    success: function (result) {
+                        if (result.code == 1) {
+                            //đóng cái textChonFile
+                            $('#textChonFile').css("display", "none");
+                            //Mở cái ô chứa  đường dẫn
+                            $('#textFile').css("display", "block");
+                            //$('#boxChuaAnh').css("display", "block");
+                            $('#txtLinkAnh').html = result.message;
+                            $('#imgAnh').src = result.message;
+                        }
+                    }
+                });
+            });
+        });
+    </script>*@
+<script>
+    CKEDITOR.replace('txtMoTa');
+</script>
+<script>
+    CKEDITOR.replace('txtMoTa1', { langugeCode: 'vi' });
+</script>

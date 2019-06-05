@@ -1,0 +1,6 @@
+﻿@model IEnumerable<ShopBookMVC.Models.Loai>
+@foreach (var item in Model)
+{
+    <li><a href="@Url.Action("Index", "Home", new {MaLoai = item.maLoai})">@Html.DisplayFor(modelItem => item.tenLoai)</a></li>
+}
+

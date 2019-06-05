@@ -1,0 +1,55 @@
+﻿@model PagedList.IPagedList<ShopBookMVC.Models.GioHang>
+@using PagedList.Mvc;
+@using ShopBookMVC.Models;
+@{
+    ViewBag.Title = "LichSuMuaHang";
+    Layout = "~/Views/Shared/_LayoutChung.cshtml";
+}
+
+<div style="background: #95B291; height: 100%;  margin: 0 auto; border-radius: 5px; width:100%;">
+    <div class="row" style="height: 50px; margin: 10px auto; text-align: center;">
+        <span style="font-size: 30px; color: #EDFFEB; font-weight: bold;">Lịch Sử Mua Hàng</span>
+    </div>
+    <hr>
+    @if (ViewBag.ThongBao != null)
+    {
+        <div class="row" style="text-align:center;">
+            <span id="txtThongBao">@ViewBag.ThongBao</span>
+        </div>
+    }
+
+    @foreach (var item in Model)
+    {
+        <div class="row" style="width: 90%; margin: 0 auto;padding: 10px; border: 1px; background: #fff; border-radius: 10px;">
+            <div class="thumbnail col-sm-2">
+                <a href="GioHang">
+                    <img src="@Url.Content("~/"+item.anh)" alt="Cinque Terre" style="width:100%; height: 100%; float: right">	<!-- ảnh  -->
+
+                </a>
+            </div>
+            <div class="col-sm-10">
+                <p style="font-weight: bold;">Tên Sách: <span style="font-weight: bold; color: red;">@Html.DisplayFor(modelItem => item.tenSach)</span></p>		<!-- tên hàng -->
+                <p style="font-weight: bold;">Đơn Giá: <span style="font-weight: bold;">@Html.DisplayFor(modelItem => item.gia)</span> </p>		<!-- giá -->
+                <p style="font-weight: bold;">Số Lượng: <span style="font-weight: bold;">@Html.DisplayFor(modelItem => item.soLuong)</span> </p>		<!-- giá -->
+                <p style="font-weight: bold;">Thành Tiền: <span style="font-weight: bold;">@Html.DisplayFor(modelItem => item.thanhTien)</span> </p>	<!-- Thanh Tiền -->
+            </div>
+        </div>
+        <hr>
+    }
+    </br>
+    <div class="row text-center">
+        @Html.PagedListPager(Model, Page => Url.Action("LichSuMuaHang", new { Page }))
+    </div>
+    @*<div class="row" style="width: 90%; margin: 0 auto;text-align:right;">
+        <span style="text-align:right; font-size: 20px; font-weight: bold;">Tổng Tiền: @ViewBag.TongTien VNĐ</span>
+    </div>*@
+    </br>
+    <div class="row" style="width: 100%; text-align: center; margin-bottom: 30px; ">
+        <div style="margin: 0 auto;">
+            @*<a href="@Url.Action("TraHang", "GioHang", new {@idTra = 0, @maSach = 1 })" class="btn btn-warning">Trả Lại Toàn Bộ</a>*@
+            <a href="@Url.Action("Index","Home")" class="btn btn-success">Tiếp Tục Mua Hàng</a>
+            @*<a href="@Url.Action("ThanhToan","GioHang")" class="btn btn-danger">Thanh Toán</a>*@
+        </div>
+    </div>
+</div>
+

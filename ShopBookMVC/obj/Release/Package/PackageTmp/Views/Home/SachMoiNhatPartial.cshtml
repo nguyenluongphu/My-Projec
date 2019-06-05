@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ShopBookMVC.Models.Sach>
+    <!-- start content_slider -->
+<div id="owl-demo" class="owl-carousel text-center">
+@foreach (var item in Model)
+{
+    <div class="item">
+        <div class="grid_1_of_4 images_1_of_4" style="width:100%; text-align:center;">
+            <a href="@Url.Action("ThemGioHang", "GioHang", new { @maSach = item.maSach, @tenSach = item.tenSach, @gia = item.gia, @anh = item.anh, @stUrl = Request.Url.ToString() })">
+            <img class="bia-sach" src="@Url.Content("~/"+item.anh)" alt="" style="height:75%; max-width:70%; margin:0 auto;"/></a>
+            <h2>@Html.DisplayFor(modelItem => item.tenSach)</h2>
+            <div class="price-details">
+                <div class="price-number">
+                    <p><span class="rupees">@Html.DisplayFor(modelItem => item.gia) VND</span></p>
+                </div>
+                <div class="add-cart">
+                    @*@Html.Action("ThemGioHang", "GioHang", new { maSach = item.maSach, tenSach = item.tenSach, gia = item.gia, stUrl = Request.Url.ToString() })*@
+                    <h4><a href="@Url.Action("ThemGioHang", "GioHang", new { @maSach = item.maSach, @tenSach = item.tenSach, @gia = item.gia, @anh = item.anh, @stUrl = Request.Url.ToString() })">Add to Cart</a></h4>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+        </div>
+    </div>
+}
+</div>
+<script src="~/Scripts/owl.carousel.js"></script>
+<link href="~/Content/owl.carousel.css" rel="stylesheet" />
+<script>
+	$(document).ready(function() {
+		$("#owl-demo").owlCarousel({
+			items : 3,
+			lazyLoad : true,
+			autoPlay : true,
+			pagination : true,
+			nav:true,
+		});
+	});
+</script>
+<!--//sreen-gallery-cursual---->

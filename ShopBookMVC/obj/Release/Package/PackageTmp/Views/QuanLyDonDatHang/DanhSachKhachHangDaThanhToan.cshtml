@@ -1,0 +1,174 @@
+﻿@model PagedList.IPagedList<ShopBookMVC.Models.KhachHangChuaThanhToan>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "DanhSachKhachHangDaThanhToan";
+    Layout = "~/Views/Shared/_adminChung.cshtml";
+}
+
+<style>
+    #tieude {
+        float: left;
+        padding-left: 5px;
+        padding-top: 10px;
+    }
+
+    #timkiem {
+        float: right;
+        padding-right: 5px;
+    }
+</style>
+<div class="col_3">
+    <div class="col-md-3 widget widget1">
+        <div class="r3_counter_box">
+            <i class="pull-left fa fa-dollar icon-rounded"></i>
+            <div class="stats">
+                <h5><strong>Đang cập nhật</strong></h5>
+                <span>Đã đặt mua</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 widget widget1">
+        <div class="r3_counter_box">
+            <i class="pull-left fa fa-laptop user1 icon-rounded"></i>
+            <div class="stats">
+                <h5><strong>Đang cập nhật..</strong></h5>
+                <span>Chưa thanh toán</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 widget widget1">
+        <div class="r3_counter_box">
+            <i class="pull-left fa fa-money user2 icon-rounded"></i>
+            <div class="stats">
+                <h5><strong>Đang cập nhật</strong></h5>
+                <span>Đã thanh toán</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 widget widget1">
+        <div class="r3_counter_box">
+            <i class="pull-left fa fa-pie-chart dollar1 icon-rounded"></i>
+            <div class="stats">
+                <h5><strong>Đang cập nhật</strong></h5>
+                <span>Tổng thu</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 widget">
+        <div class="r3_counter_box">
+            <i class="pull-left fa fa-users dollar2 icon-rounded"></i>
+            <div class="stats">
+                <h5><strong>Đang cập nhật</strong></h5>
+                <span>Tổng chi</span>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+</div>
+<section class="panel tasks-widget">
+    <header class="row panel-heading" style="padding:10px; height:100%;">
+        <div class="row" style="text-align:center; color:green">
+            <span id="ThongBao">@ViewBag.ThongBao</span>
+        </div>
+        <h4 class="col-sm-6" id="tieude"><strong>Danh Hóa Đơn Đã Thanh Toán</strong></h4>
+        <div class="col-sm-6" id="timkiem">
+            <div>
+                <div class="search-box" style="width:190px; float:right;">
+                    @using (Html.BeginForm("DanhSachKhachHangDaThanhToan", "QuanLyDonDatHang", new { @class = "input", @name = "timKiem" }))
+                    {
+                        @Html.TextBox("txtTimKiem", "", new { @class = "sb-search-input input__field--madoka", @placeholder = "Search...", @type = "search" })
+                        <label class="input__label" for="txtTimKiem">
+                            <svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+                                <path d="m0,0l404,0l0,77l-404,0l0,-77z" />
+                            </svg>
+                        </label>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </header>
+    <div class="panel-body">
+        <table class="table table-bordered table-hover table-responsive">
+            <thead>
+                <tr>
+
+                    <th>Họ Tên</th>
+                    <th>Địa Chỉ</th>
+                    <th>Số ĐT</th>
+                    <th>Ngày Mua</th>
+                    <th>Thannh Toán</th>
+                    <th style="width:125px;">Chức Năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr id="row-@item.maHD">
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.hoTen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.diaChi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.soDT)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ngaymua)
+                        </td>
+                        <td>
+                            @(item.tinhTrangThanhToan ? "Đã thanh toán" : "Chưa thanh toán")
+
+                            @*@Html.DisplayFor(modelItem => item.makh)*@
+                        </td>
+                        <td style="padding:5px;width:125px">
+                            <div class="pull-right hidden-phone">
+                                @if (item.tinhTrangThanhToan)
+                                {
+                                    <button class="btn btn-success btn-xs"><i class="fa fa-check" @*disabled*@> Đã Nhận</i></button>
+                                }
+
+                                else
+                                {
+                                    <a href="#" data-id="" placeholder="Xem chi tiết sách" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Xác Nhận</a>
+                                }
+                                @*<a href="@Url.Action("ChiTiet","Loai", new {id = item.makh })" placeholder="Xem chi tiết sách" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i> Xác Nhận</a>*@
+                                <button id="btnXoa" onclick="Xoa('@item.maHD')" data-id="@item.maHD" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row text-center">
+        @Html.PagedListPager(Model, Page => Url.Action("DanhSachKhachHangChuaThanhToan", new { Page }))
+    </div>
+</section>
+<script>
+    function Xoa($id) {
+        //var dt = $(this).data("id");
+        var daata = $id;
+        var rs = confirm("Bạn có chắc chắn muốn xóa hóa đơn " + $id);
+        if (rs == true) {
+            $.ajax({
+                type: 'POST',
+                url: '/HoaDon/XoaHoaDon',
+                data: { id: daata },
+                success: function (resutl) {
+                    if(resutl.code == 1){
+                        $('#ThongBao').html(resutl.message);
+                        $('#row-' + daata).hide();
+                    } else {
+                        alert(resutl.message);
+                    }
+
+                }
+            });
+        }
+    }
+</script>

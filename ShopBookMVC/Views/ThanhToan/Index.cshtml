@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutChung.cshtml";
+}
+<script>
+    $(document).ready(function () {
+        
+    });
+</script>
+<div style="background: #95B291; height: 100%;  margin: 0 auto; border-radius: 5px; width:100%;">
+    <div class="row" style="height: 100%; margin: 10px auto; text-align: center;">
+        <span style="font-size: 30px; color: #EDFFEB; font-weight: bold;">Phương Thức Thanh Toán</span>
+
+              <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                Chọn Phương Thức Thanh Toán
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                @foreach (var item in ViewBag.lstPTTT)
+                {
+                    <li><a href="@Url.Action("Index", "ThanhToan", new {ID = item.ID})">@item.tenPhuongThuc</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    
+</div>
+

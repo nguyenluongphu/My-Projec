@@ -1,0 +1,61 @@
+﻿@model PagedList.IPagedList <ShopBookMVC.Models.Sach>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutChung.cshtml";
+}
+
+<style>
+    .photobook {
+        width: 100%;
+        height: 83%;
+    }
+</style>
+
+<div class="content_top">
+    <div class="heading">
+        <h3>Sách Mới Nhất</h3>
+    </div>
+    @*<div class="see">
+        <p><a href="#">See all Products</a></p>
+    </div>*@
+    <div class="clear"></div>
+</div>
+
+<div class="section group">
+    @Html.Action("SachMoiNhatPartial", "Home")
+</div>
+<div class="content_bottom">
+    <div class="heading">
+        <h3>Tất Cả Các Loại Sách</h3>
+    </div>
+    <div class="see">
+        <p><a href="#">See all Products</a></p>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div class="section group">
+    @foreach (var item in Model)
+    {
+        <div class="grid_1_of_4 images_1_of_4">
+            <div class="photobook">
+                <a href="@Url.Action("ThemGioHang", "GioHang", new { @maSach = item.maSach, @tenSach = item.tenSach, @gia = item.gia, @anh = item.anh, @stUrl = Request.Url.ToString() })"><img class="bia-sach" src="@Url.Content("~/"+item.anh)" alt="" /></a>
+                <h2>@Html.DisplayFor(modelItem => item.tenSach)</h2>
+                </div>
+            <div class="price-details">
+                <div class="price-number">
+                    <p><span class="rupees" style="font-size:1.4em">@Html.DisplayFor(modelItem => item.gia) VND</span></p>
+                </div>
+                <div class="add-cart">
+                    <h4><a href="@Url.Action("ThemGioHang", "GioHang", new { @maSach = item.maSach, @tenSach = item.tenSach, @gia = item.gia, @anh = item.anh, @stUrl = Request.Url.ToString() })">Add to Cart</a></h4>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+        </div>
+    }
+</div>
+<div class="row text-center">
+    @Html.PagedListPager(Model, Page => Url.Action("Index", new {Page}))
+</div>

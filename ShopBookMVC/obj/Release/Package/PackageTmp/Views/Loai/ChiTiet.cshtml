@@ -1,0 +1,70 @@
+﻿@model ShopBookMVC.Models.Loai
+
+@{
+    ViewBag.Title = "Tên Loại";
+    Layout = "~/Views/Shared/_adminChung.cshtml";
+}
+<style>
+    #header-title {
+        background: #b7bdc1;
+        height: 50px;
+        text-align: center;
+        margin: 0px;
+    }
+
+    #themSach {
+        margin: 0 auto;
+        width: 70%;
+        box-shadow: 0px 0px 3px rgb(150, 150, 150);
+        -webkit-box-shadow: 0px 0px 3px rgb(150, 150, 150);
+        -moz-box-shadow: 0px 0px 3px rgb(150, 150, 150);
+        -o-box-shadow: 0px 0px 3px rgb(150, 150, 150);
+    }
+
+    #tieudeThemSach {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin: auto 10px;
+    }
+</style>
+<div class="panel tasks-widget" id="themSach">
+    <div class="row" id="header-title">
+        <span id="tieudeThemSach">Chi Tiết Loại</span>
+    </div>
+    <div class="row" style="text-align:center;">
+        <span id="thongBao" style="margin:0 auto; color:red;">@ViewBag.ThongBao</span>
+    </div>
+
+    <div class="row" style="padding:0px 15px;">
+        @using (Html.BeginForm("CapNhat", "Loai", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.maLoai, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.maLoai, new {@readonly = "readonly", @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.maLoai, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.tenLoai, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.tenLoai, new { @required = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.tenLoai, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Sửa loại" class="btn btn-success" />
+                        <a href="@Url.Action("Index","Loai")" value="Quay về" class="btn btn-primary">Quay về</a>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
